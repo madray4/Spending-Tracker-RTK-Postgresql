@@ -2,7 +2,8 @@ const express = require('express');
 const requireAuth = require('../middleware/requireAuth');
 const { getEntries,
         getEntry,
-        createEntry } = require('./controller');
+        createEntry,
+        deleteEntry, } = require('./controller');
 
 const router = express.Router();
 
@@ -19,6 +20,7 @@ router.get('/:id', getEntry);
 router.post('/', createEntry);
 
 // DELETE an entry
+router.delete('/:id', deleteEntry);
 
 // UPDATE an entry
 

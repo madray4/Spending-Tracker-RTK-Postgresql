@@ -32,7 +32,16 @@ const createEntry = async (req, res) => {
 };
 
 // DELETE an entry
+const deleteEntry = async (req, res) => {
+  const { id } = req.params;
+  pool.query(queries.deleteEntry, [id], (error, results) => {
+    if (error) return res.status(500).json({ error: error.message });
+    res.status(200).json(results.rows[0].id);
+    // console.log(results.rows);
+    // res.status(200).json("cool");
 
+  });
+};
 
 // UPDATE an entry
 
@@ -40,4 +49,5 @@ module.exports = {
   getEntries,
   getEntry,
   createEntry,
+  deleteEntry,
 }

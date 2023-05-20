@@ -52,7 +52,7 @@ export const createEntry = createAsyncThunk(
 export const deleteEntry = createAsyncThunk(
   'entries/deleteEntry',
   async ({ token, entry }, { rejectWithValue }) => {
-    const response = await fetch(`/api/entries/${entry._id}`, {
+    const response = await fetch(`/api/entries/${entry.id}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`
@@ -61,6 +61,7 @@ export const deleteEntry = createAsyncThunk(
     const json = await response.json();
     
     if (response.ok){
+      console.log(json);
       return json;
     }
     return rejectWithValue(json.error);
@@ -128,7 +129,7 @@ export const entriesSlice = createSlice({
       return {...state,
         error: null,
         entries: state.entries.filter((entry) => {
-          return entry._id !== action.payload._id;
+          return entry.id !== action.payload;
         })
       }
     });
