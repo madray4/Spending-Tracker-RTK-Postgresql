@@ -15,8 +15,49 @@ const hashPassword = async (password) => {
   return hash;
 };
 
-// login user
+const validatePassword = async (password, userPassword) => {
+  const match = await bcrypt.compare(password, userPassword);
+  return match;
+};
 
+const getUserInfo = async(email) => {
+  const response = await pool.query(queries.getUserByEmail, [email]);
+  return response.rows;
+  //   if (error) return error;
+  //   console.log(results);
+  //   return results;
+  // });
+  // console.log(response);
+  // return response;
+};  
+
+// login user
+const login = async (req, res) => {
+  const { email, password } = req.body;
+  if(!email || !password) return res.status(500).json({ error: "All fields must be filled" });
+
+  // check if user exists
+  const results = await getUserInfo(email);
+  if (!results[0]) return res.status(500).json({ error: "Invalid Credentials" });
+
+  // validate password
+  const match = await validatePassword(password, results[0].password);
+  if (!match) return res.status(500).json({ error: "Invalid Credentials" });
+
+  // return userinfo
+  const token = createToken(results[0].id);
+  res.status(200).json({ email, token });
+  // console.log(userInfo);
+  // let userInfo = "";
+  // pool.query(queries.getUserByEmail, [email], (error, results) => {
+  //   const userExists = results.rows.length > 0;
+  //   if (!userExists) return res.status(500).json({ error: "Account doesn't exists" });
+  //   userInfo = results.rows[0];
+  //   console.log(userInfo);
+  //   const match = validatePassword()
+    
+  // });
+};
 
 // signup user
 const signupUser = async (req, res) => {
@@ -46,5 +87,6 @@ const signupUser = async (req, res) => {
 };
 
 module.exports = {
+  login,
   signupUser,
 }

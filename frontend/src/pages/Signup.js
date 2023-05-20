@@ -10,7 +10,7 @@ const Signup = () => {
 
   const emailRef = useRef();
   const passwordRef = useRef();
-  const { loading , error } = useSelector(state => state.auth)
+  const { loading , error } = useSelector(state => state.auth);
   
   const handleSubmit = async (e) => {
     e.preventDefault();
