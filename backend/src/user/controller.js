@@ -21,15 +21,14 @@ const validatePassword = async (password, userPassword) => {
 };
 
 const getUserInfo = async(email) => {
-  const response = await pool.query(queries.getUserByEmail, [email]);
-  return response.rows;
-  //   if (error) return error;
-  //   console.log(results);
-  //   return results;
-  // });
-  // console.log(response);
-  // return response;
-};  
+  let response, error = null;
+  try {
+    response = await pool.query(queries.getUserByEmail, [email]);
+  } catch (err) {
+    error = err;
+  }
+  return { rows: response.rows, error }; 
+};
 
 // login user
 const login = async (req, res) => {
@@ -37,26 +36,16 @@ const login = async (req, res) => {
   if(!email || !password) return res.status(500).json({ error: "All fields must be filled" });
 
   // check if user exists
-  const results = await getUserInfo(email);
-  if (!results[0]) return res.status(500).json({ error: "Invalid Credentials" });
+  let { rows, error } = await getUserInfo(email);
+  if (error) return res.status(500).json({ error: error.message });
+  if (!rows[0]) return res.status(500).json({ error: "Invalid Credentials" });
 
   // validate password
-  const match = await validatePassword(password, results[0].password);
+  const match = await validatePassword(password, rows[0].password);
   if (!match) return res.status(500).json({ error: "Invalid Credentials" });
 
-  // return userinfo
-  const token = createToken(results[0].id);
+  const token = createToken(rows[0].id);
   res.status(200).json({ email, token });
-  // console.log(userInfo);
-  // let userInfo = "";
-  // pool.query(queries.getUserByEmail, [email], (error, results) => {
-  //   const userExists = results.rows.length > 0;
-  //   if (!userExists) return res.status(500).json({ error: "Account doesn't exists" });
-  //   userInfo = results.rows[0];
-  //   console.log(userInfo);
-  //   const match = validatePassword()
-    
-  // });
 };
 
 // signup user
@@ -66,24 +55,28 @@ const signupUser = async (req, res) => {
   if(!email || !password) return res.status(500).json({ error: "All fields must be filled" });
   if(!validator.isEmail(email)) return res.status(500).json({ error: "Email is not valid" });
   if(!validator.isStrongPassword(password)) return res.status(500).json({ error: "Password is not strong enough" });
+  
+  // check if user exists
+  let { rows, error } = await getUserInfo(email);
+  if (error) return res.status(500).json({ error: error.message });
+  if (rows[0]) return res.status(500).json({ error: "Account Already Exists" });
+
+  // hash password
   const hashedPassword = await hashPassword(password);
 
-  // check if account already exists
-  pool.query(queries.getUserByEmail, [email], (error, results) => {
-    const userExists = results.rows.length > 0;
-    if (userExists) return res.status(500).json({ error: "Account already exists" });
+  // add account credentials to database
+  try {
+    await pool.query(queries.addUser, [email, hashedPassword]);
+    let { rows, error } = await getUserInfo(email);
+    if (error) return res.status(500).json({ error: error.message });
 
-    // hash password
-    pool.query(queries.addUser, [email, hashedPassword], (error, results) => {
-      if (error) return res.status(500).json({ error: error.message });
-      pool.query(queries.getUserByEmail, [email], (error, results) => {
-        if (error) return res.status(500).json({ error: error.message });
-        // return user details upon successful insertion
-        const token = createToken(results.rows[0].id);
-        res.status(200).json({ email , token });
-      });
-    });
-  });
+    // return user information
+    const token = createToken(rows[0].id);
+    res.status(200).json({ email, token });
+
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
 };
 
 module.exports = {
