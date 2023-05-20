@@ -11,6 +11,14 @@ const getEntries = async (req, res) => {
 };
 
 // GET a single entry
+const getEntry = async (req, res) => {
+  const { id } = req.params;
+  pool.query(queries.getEntry, [id], (error, results) => {
+    if (error) return res.status(500).json({ error: error.message });
+    if (results.rows.length == 0) return res.status(500).json({ error: "No such entry."});
+    res.status(200).json(results.rows[0]);
+  });
+};
 
 // CREATE an entry
 
@@ -20,4 +28,5 @@ const getEntries = async (req, res) => {
 
 module.exports = {
   getEntries,
+  getEntry
 }

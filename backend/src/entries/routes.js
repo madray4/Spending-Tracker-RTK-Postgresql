@@ -1,6 +1,7 @@
 const express = require('express');
 const requireAuth = require('../middleware/requireAuth');
-const { getEntries } = require('./controller');
+const { getEntries,
+        getEntry } = require('./controller');
 
 const router = express.Router();
 
@@ -11,7 +12,7 @@ router.use(requireAuth);
 router.get('/', getEntries);
 
 // GET a single entry
-
+router.get('/:id', getEntry);
 // CREATE an entry
 
 // DELETE an entry

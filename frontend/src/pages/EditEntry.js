@@ -16,7 +16,7 @@ const EditEntry = () => {
   const [store, setStore ] = useState('');
   const [item, setItem ] = useState('');
   const [cost, setCost ] = useState('');
-  const url = '/api/entries/' + id;
+  const url = `/api/entries/${id}`;
 
 
   const handleSubmit = async (e) => {
@@ -33,6 +33,7 @@ const EditEntry = () => {
   }
 
   useEffect(() => {
+    console.log(url);
     if (!user) { navigate('/'); }
     const fetchEntry = async () =>{
       const response = await fetch(url, {
@@ -41,15 +42,17 @@ const EditEntry = () => {
         }
       });
       const json = await response.json();
+      console.log(json);
       if(response.ok){
-        setDate(json.date);
+        setDate(json.date.slice(0,10));
         setStore(json.store);
         setItem(json.item);
-        setCost(json.totalCost);
+        setCost(json.totalcost);
       }
-      else{
-        navigate('/');
-      }
+      console.log(json.date);
+      // else{
+      //   navigate('/');
+      // }
     }
 
     fetchEntry();

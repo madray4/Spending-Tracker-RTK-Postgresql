@@ -22,7 +22,7 @@ const EntryDetails = ({ entry }) => {
       <p>{entry.item}</p>
       <p>${entry.totalcost}</p>
       <div className="entry-details-buttons">
-        <Link to={'/edit-entry/' + entry._id}>
+        <Link to={'/edit-entry/' + entry.id}>
           <span className="material-symbols-outlined entry-details-button">edit</span>
         </Link>
         <span className="material-symbols-outlined entry-details-button" onClick={handleDelete}>delete</span>
