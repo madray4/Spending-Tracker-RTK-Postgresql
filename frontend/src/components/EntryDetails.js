@@ -20,7 +20,7 @@ const EntryDetails = ({ entry }) => {
     <div className="entry-details">
       <p>{entry.store}</p>
       <p>{entry.item}</p>
-      <p>${entry.totalCost}</p>
+      <p>${entry.totalcost}</p>
       <div className="entry-details-buttons">
         <Link to={'/edit-entry/' + entry._id}>
           <span className="material-symbols-outlined entry-details-button">edit</span>
