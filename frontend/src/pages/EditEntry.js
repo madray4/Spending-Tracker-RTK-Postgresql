@@ -49,10 +49,9 @@ const EditEntry = () => {
         setItem(json.item);
         setCost(json.totalcost);
       }
-      console.log(json.date);
-      // else{
-      //   navigate('/');
-      // }
+      else{
+        navigate('/');
+      }
     }
 
     fetchEntry();

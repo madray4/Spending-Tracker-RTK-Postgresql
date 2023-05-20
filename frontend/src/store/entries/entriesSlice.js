@@ -42,6 +42,7 @@ export const createEntry = createAsyncThunk(
       return json;
     }
     else{
+      // console.log(json);
       return rejectWithValue(json);
     }
   }

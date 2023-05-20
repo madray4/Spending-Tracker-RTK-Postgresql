@@ -18,7 +18,7 @@ const CreateEntry = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const entry = {date, store, item, totalCost:cost};
+    const entry = { date, store, item, totalcost:cost };
     const json = await dispatch(createEntry({ token: user.token, entry}));
     if(!json.error){
       navigate('/');
