@@ -37,17 +37,22 @@ const deleteEntry = async (req, res) => {
   pool.query(queries.deleteEntry, [id], (error, results) => {
     if (error) return res.status(500).json({ error: error.message });
     res.status(200).json(results.rows[0].id);
-    // console.log(results.rows);
-    // res.status(200).json("cool");
-
   });
 };
 
 // UPDATE an entry
+const updateEntry = async (req, res) => {
+  const { id } = req.params;
+  // check if entry exists
+
+  // update entry if entry exists
+  res.status(200).json("Works");
+};
 
 module.exports = {
   getEntries,
   getEntry,
   createEntry,
   deleteEntry,
+  updateEntry
 }

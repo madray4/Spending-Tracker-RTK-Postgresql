@@ -3,7 +3,8 @@ const requireAuth = require('../middleware/requireAuth');
 const { getEntries,
         getEntry,
         createEntry,
-        deleteEntry, } = require('./controller');
+        deleteEntry,
+        updateEntry } = require('./controller');
 
 const router = express.Router();
 
@@ -23,5 +24,6 @@ router.post('/', createEntry);
 router.delete('/:id', deleteEntry);
 
 // UPDATE an entry
+router.patch('/:id', updateEntry);
 
 module.exports = router;
