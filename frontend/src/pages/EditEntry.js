@@ -27,9 +27,10 @@ const EditEntry = () => {
     }
     const editedEntry = { date, store, item, totalcost: cost, _id: id };
     const json = await dispatch(updateEntry({ token: user.token, entry: editedEntry }));
-    if(!json.error){
-      navigate('/');
-    }
+    console.log(json);
+    // if(!json.error){
+    //   navigate('/');
+    // }
   }
 
   useEffect(() => {

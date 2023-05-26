@@ -146,11 +146,10 @@ export const entriesSlice = createSlice({
       }
     });
     builder.addCase(updateEntry.fulfilled, (state, action) => {
-      let newEntries = [...state.entries];
-      newEntries = newEntries.filter((entry) => {
-        return entry._id !== action.payload._id;
+      let newEntries = state.entries.filter((entry) => {
+        return entry.id !== action.payload.id;
       });
-      newEntries = [...state.entries, action.payload];
+      newEntries = [...newEntries, action.payload];
       return{
         ...state,
         loading: false,

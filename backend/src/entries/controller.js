@@ -59,13 +59,13 @@ const updateEntry = async (req, res) => {
   if(!totalcost) emptyFields.push('totalcost');
   if(!date) emptyFields.push('date');
   if(emptyFields.length > 0) return res.status(400).json({error: 'Please fill in all fields', emptyFields});
-  // check if entry exists
-  // pool.query(queries.updateEntry, [store, item, totalcost, date, id], (error, results) => {
-  //   if (error) return res.status(500).json({ error: error.message });
-  //   res.status(200).json(results.row[0]);
-  // });
-  // update entry if entry exists
-  res.status(200).json("Works");
+  // check if entry exists and update
+
+  pool.query(queries.updateEntry, [store, item, totalcost, date, id], (error, results) => {
+    if (error) return res.status(500).json({ error: error.message });
+    res.status(200).json(results.rows[0]);
+  });
+  // res.status(200).json("Works");
 };
 
 module.exports = {
