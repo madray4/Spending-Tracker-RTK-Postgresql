@@ -25,7 +25,7 @@ const EditEntry = () => {
     if (!user) {
       return;
     }
-    const editedEntry = { date, store, item, totalCost: cost, _id: id };
+    const editedEntry = { date, store, item, totalcost: cost, _id: id };
     const json = await dispatch(updateEntry({ token: user.token, entry: editedEntry }));
     if(!json.error){
       navigate('/');
@@ -33,7 +33,6 @@ const EditEntry = () => {
   }
 
   useEffect(() => {
-    console.log(url);
     if (!user) { navigate('/'); }
     const fetchEntry = async () =>{
       const response = await fetch(url, {
@@ -42,7 +41,6 @@ const EditEntry = () => {
         }
       });
       const json = await response.json();
-      console.log(json);
       if(response.ok){
         setDate(json.date.slice(0,10));
         setStore(json.store);
@@ -79,7 +77,7 @@ const EditEntry = () => {
       <input type="number"
               onChange={(e) => setCost(e.target.value)}
               value={cost}
-              className={emptyFields.includes('totalCost') ? "error" : ""}/>
+              className={emptyFields.includes('totalcost') ? "error" : ""}/>
       <button>Submit</button>
       {error && <div className="error">{error}</div>}
     </form>

@@ -51,7 +51,14 @@ const deleteEntry = async (req, res) => {
 const updateEntry = async (req, res) => {
   const { id } = req.params;
   const { store, item, totalcost, date } = req.body;
-  console.log(store, item, totalcost, date);
+
+  // empty fields check
+  let emptyFields = [];
+  if(!store) emptyFields.push('store');
+  if(!item) emptyFields.push('item');
+  if(!totalcost) emptyFields.push('totalcost');
+  if(!date) emptyFields.push('date');
+  if(emptyFields.length > 0) return res.status(400).json({error: 'Please fill in all fields', emptyFields});
   // check if entry exists
   // pool.query(queries.updateEntry, [store, item, totalcost, date, id], (error, results) => {
   //   if (error) return res.status(500).json({ error: error.message });
