@@ -47,7 +47,7 @@ const CreateEntry = () => {
       <input type="number"
               onChange={(e) => setCost(e.target.value)}
               value={cost}
-              className={emptyFields.includes('totalCost') ? "error" : ""}/>
+              className={emptyFields.includes('totalcost') ? "error" : ""}/>
       <button>Submit</button>
       {error && <div className="error">{error}</div>}
     </form>
